@@ -1,40 +1,57 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_catalog/utils/routes.dart';
-import 'package:flutter_catalog/widgets/drawer.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_catalog/models/catalog.dart';
 
-class HomePage extends StatelessWidget {
+import 'package:flutter_catalog/widgets/drawer.dart';
+import 'package:flutter_catalog/widgets/item_widget.dart';
+
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  Future<bool> _onBackPressed() async {
+    exit(0);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+  loadData() async {
+    var catelogJson = await rootBundle.loadString("assets/files/catalog.json");
+    var decodeData = jsonDecode(catelogJson);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home'),
-      ),
-      body: Center(
-        child: Column(
-          children: [
-            const Text('Hello World is a Flutter App'),
-            const SizedBox(
-              height: 20,
-            ),
-            ElevatedButton(
-              style: const ButtonStyle(),
-              onPressed: () {
-                Navigator.pushNamed(context, MyRoutes.addemployee);
-              },
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 60, vertical: 10),
-                child: Text(
-                  "Add Employee",
-                  style: TextStyle(fontSize: 20),
-                ),
-              ),
-            )
-          ],
+    // ignore: unused_local_variable
+    final dumyList = List.generate(50, (i) => CatalogModel.items[0]);
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Home'),
+          systemOverlayStyle:
+              const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
         ),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListView.builder(
+              itemCount: dumyList.length,
+              itemBuilder: (context, index) {
+                return ItemWidget(item: dumyList[index]);
+              }),
+        ),
+        drawer: const MyDrawer(),
       ),
-      drawer: const MyDrawer(),
     );
   }
 }
