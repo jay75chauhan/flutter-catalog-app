@@ -22,12 +22,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          systemOverlayStyle: const SystemUiOverlayStyle(
-              statusBarColor: Colors.transparent,
-              statusBarIconBrightness: Brightness.dark),
-          toolbarHeight: 0,
-        ),
+        appBar: AppBar(),
         body: Container(
           height: MediaQuery.of(context).size.height,
           color: Colors.white,
